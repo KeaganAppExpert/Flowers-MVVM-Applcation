@@ -2,26 +2,20 @@ package com.example.flowersmvvmapplication.view
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flowersmvvmapplication.R
 import com.example.flowersmvvmapplication.adapter.flowersAdapter
-import com.example.flowersmvvmapplication.api.ApiInterface
-import com.example.flowersmvvmapplication.api.RetrofitClient
-import com.example.flowersmvvmapplication.model.flowerModel
 import com.example.flowersmvvmapplication.util.RxUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import com.example.flowersmvvmapplication.viewmodel.FlowersViewModel
 import rx.subscriptions.CompositeSubscription
-import io.reactivex.Observer
-import retrofit2.Call
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,12 +33,15 @@ class flowerListFragment : Fragment() {
     private var mAdapter: flowersAdapter?= null
     private var pDialog: ProgressDialog?= null
 
+    private var flowersViewModel: FlowersViewModel?= null
+
     /**
      * Subscription that represents a group of Subscriptions that are unsubscribed together. */
     private val _subscriptions = CompositeSubscription()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        flowersViewModel = ViewModelProviders.of(requireActivity()).get(FlowersViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -57,7 +54,7 @@ class flowerListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        retrieveData()
+        //retrieveData()
         initialRecyclerView()
         intialaizeProgress()
     }
@@ -101,7 +98,7 @@ class flowerListFragment : Fragment() {
         }
     }
 
-    fun retrieveData() {
+    /*fun retrieveData() {
         val apiService: ApiInterface = RetrofitClient.getClient()!!.create(ApiInterface::class.java)
         apiService.getFlowerslist()
             .subscribeOn(Schedulers.io())
@@ -110,7 +107,7 @@ class flowerListFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onError(e: Throwable) {
-                    /*hidePDialog();*/
+                    *//*hidePDialog();*//*
                     Log.d("message", e.message!!)
                 }
 
@@ -129,11 +126,5 @@ class flowerListFragment : Fragment() {
                     hidePDialog()
                 }
             })
-
-        /*apiService.getImageUrl("image")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<>)*/
-
-    }
+    }*/
 }

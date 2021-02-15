@@ -15,7 +15,8 @@ import com.example.flowersmvvmapplication.util.ItemClickListener
 
 
 class flowersAdapter(posts: List<flowerModel>, rowLayout: Int, context: Context): RecyclerView.Adapter<flowersAdapter.ViewHolder>(){
-    private var mItems: List<flowerModel>? = null
+    private var mItems: List<flowerModel>? = emptyList()
+    //this "set" is a convenience method for vars, similar to a setter in java
     private var mContext: Context? = null
     private var mrowLayout: Int
 
