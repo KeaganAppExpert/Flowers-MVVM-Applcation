@@ -5,17 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flowersmvvmapplication.R
 import com.example.flowersmvvmapplication.adapter.flowersAdapter
-import com.example.flowersmvvmapplication.util.RxUtils
+import com.example.flowersmvvmapplication.databinding.ActivityMainBinding
+import com.example.flowersmvvmapplication.databinding.FragmentFlowerListBinding
 import com.example.flowersmvvmapplication.viewmodel.FlowersViewModel
-import rx.subscriptions.CompositeSubscription
+import kotlinx.coroutines.flow.flow
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +35,11 @@ class flowerListFragment : Fragment() {
     private var mAdapter: flowersAdapter?= null
     private var pDialog: ProgressDialog?= null
 
+    private var _binding: FragmentFlowerListBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
     private val flowersViewModel by lazy {
             ViewModelProviders.of(this).get(FlowersViewModel::class.java)
     }
@@ -42,16 +49,25 @@ class flowerListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.recycler_main, container, false)
+        val binding: FragmentFlowerListBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_flower_list,
+                container,
+                false)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewmodel = flowersViewModel
+        }
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initialRecyclerView()
         intialaizeProgress()
         retrieveData()
@@ -65,10 +81,16 @@ class flowerListFragment : Fragment() {
         super.onPause()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        hideDialog()
+    }
+/*
     override fun onDestroy() {
         super.onDestroy()
         hideDialog()
-    }
+    }*/
 
     private fun hideDialog() {
         pDialog!!.dismiss()
@@ -97,14 +119,13 @@ class flowerListFragment : Fragment() {
 
     fun retrieveData() {
         mAdapter = flowersAdapter(
-                R.layout.card_row,
-                context!!
+            R.layout.card_row,
+            context!!
         )
             mRecyclerView!!.adapter = mAdapter
             hidePDialog()
 
-        flowersViewModel.flowersList?.observe(this, {
-            flowersList ->
+        flowersViewModel.flowersList?.observe(viewLifecycleOwner, { flowersList ->
             flowersList?.apply {
                 mAdapter?.mItems = this
             }

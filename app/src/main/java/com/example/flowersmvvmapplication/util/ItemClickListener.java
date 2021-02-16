@@ -10,4 +10,5 @@ public interface ItemClickListener {
      * @param isLongClick
      */
     void onClick(View view, int position, boolean isLongClick);
+    void OnError(View view, String message);
 }

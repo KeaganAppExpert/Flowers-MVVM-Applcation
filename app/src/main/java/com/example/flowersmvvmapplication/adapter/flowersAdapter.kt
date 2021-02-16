@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.flowersmvvmapplication.R
+import com.example.flowersmvvmapplication.databinding.CardRowBinding
 import com.example.flowersmvvmapplication.model.flowerModel
 import com.example.flowersmvvmapplication.util.ItemClickListener
 
@@ -75,17 +77,12 @@ class flowersAdapter(rowLayout: Int, context: Context): RecyclerView.Adapter<flo
     }
 
     override fun onBindViewHolder(holder: flowersAdapter.ViewHolder, position: Int) {
-        val basePhotoURL = "https://services.hanselandpetal.com/photos/"
-        val flower: flowerModel = mItems!![position]
-        holder.flowerName!!.text = flower.getName()
-        holder.flowerCategory!!.text = flower.getCategory()
-        holder.productID!!.text = flower.getProductId().toString()
-        Glide.with(mContext!!)
-            .load(basePhotoURL + flower.getPhoto()!!)
-            .into(holder.flowerImage!!)
-        holder.setClickListener(object : ItemClickListener{
+        holder.also {
+            it.flower = cakesList[position]
+            it.clickCallback = listener
+        }
 
-            override fun onClick(view: View?, position: Int, isLongClick: Boolean) {
+            /*override fun onClick(view: View?, position: Int, isLongClick: Boolean) {
                 if (isLongClick) {
                     Toast.makeText(
                             mContext,
@@ -95,8 +92,7 @@ class flowersAdapter(rowLayout: Int, context: Context): RecyclerView.Adapter<flo
                 } else {
                     Toast.makeText(mContext, "#" + (position+1) + " - " + flower.getInstructions()!!, Toast.LENGTH_SHORT).show();
                 }
-            }
-        })
+            }*/
     }
 
     override fun getItemCount(): Int {

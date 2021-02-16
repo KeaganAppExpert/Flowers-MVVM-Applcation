@@ -1,82 +1,36 @@
 package com.example.flowersmvvmapplication.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-
-
-
-class flowerModel {
+@Parcelize
+data class flowerModel (
     @SerializedName("category")
     @Expose
-    private var category: String? = null
+    private var category: String? = null,
 
     @SerializedName("price")
     @Expose
-    private var price: Double? = null
+    private var price: Double? = null,
 
     @SerializedName("instructions")
     @Expose
-    private var instructions: String? = null
+    private var instructions: String? = null,
 
     @SerializedName("photo")
     @Expose
-    private var photo: String? = null
+    private var photo: String? = null,
 
     @SerializedName("name")
     @Expose
-    private var name: String? = null
+    private var name: String? = null,
 
     @SerializedName("productId")
     @Expose
-    private var productId: Int? = null
+    private var productId: Int? = null,
+    ): Parcelable {
 
-    fun getCategory(): String? {
-        return category
-    }
-
-    fun setCategory(category: String?) {
-        this.category = category
-    }
-
-    fun getPrice(): Double? {
-        return price
-    }
-
-    fun setPrice(price: Double?) {
-        this.price = price
-    }
-
-    fun getInstructions(): String? {
-        return instructions
-    }
-
-    fun setInstructions(instructions: String?) {
-        this.instructions = instructions
-    }
-
-    fun getPhoto(): String? {
-        return photo
-    }
-
-    fun setPhoto(photo: String?) {
-        this.photo = photo
-    }
-
-    fun getName(): String? {
-        return name
-    }
-
-    fun setName(name: String?) {
-        this.name = name
-    }
-
-    fun getProductId(): Int? {
-        return productId
-    }
-
-    fun setProductId(productId: Int?) {
-        this.productId = productId
-    }
 }
