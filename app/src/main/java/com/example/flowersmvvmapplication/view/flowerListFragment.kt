@@ -33,15 +33,12 @@ class flowerListFragment : Fragment() {
     private var mAdapter: flowersAdapter?= null
     private var pDialog: ProgressDialog?= null
 
-    private var flowersViewModel: FlowersViewModel?= null
-
-    /**
-     * Subscription that represents a group of Subscriptions that are unsubscribed together. */
-    private val _subscriptions = CompositeSubscription()
+    private val flowersViewModel by lazy {
+            ViewModelProviders.of(this).get(FlowersViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        flowersViewModel = ViewModelProviders.of(requireActivity()).get(FlowersViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -54,14 +51,14 @@ class flowerListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //retrieveData()
+
         initialRecyclerView()
         intialaizeProgress()
+        retrieveData()
     }
 
     override fun onResume() {
         super.onResume()
-        RxUtils.unsubscribeIfNotNull(_subscriptions)
     }
 
     override fun onPause() {
@@ -98,33 +95,19 @@ class flowerListFragment : Fragment() {
         }
     }
 
-    /*fun retrieveData() {
-        val apiService: ApiInterface = RetrofitClient.getClient()!!.create(ApiInterface::class.java)
-        apiService.getFlowerslist()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<List<flowerModel>?> {
-                override fun onSubscribe(d: Disposable) {}
+    fun retrieveData() {
+        mAdapter = flowersAdapter(
+                R.layout.card_row,
+                context!!
+        )
+            mRecyclerView!!.adapter = mAdapter
+            hidePDialog()
 
-                override fun onError(e: Throwable) {
-                    *//*hidePDialog();*//*
-                    Log.d("message", e.message!!)
-                }
-
-                override fun onComplete() {
-                    println("Done")
-                }
-
-                override fun onNext(flowerModel: List<flowerModel>) {
-                    //Call that passes the adapter to the view
-                    mAdapter = flowersAdapter(
-                            flowerModel!!,
-                        R.layout.card_row,
-                        context!!
-                    )
-                    mRecyclerView!!.adapter = mAdapter
-                    hidePDialog()
-                }
-            })
-    }*/
+        flowersViewModel.flowersList?.observe(this, {
+            flowersList ->
+            flowersList?.apply {
+                mAdapter?.mItems = this
+            }
+        })
+    }
 }

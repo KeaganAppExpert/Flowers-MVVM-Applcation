@@ -6,7 +6,7 @@ import com.example.flowersmvvmapplication.model.flowerModel
 import retrofit2.Response
 
 class FlowerRepository {
-    suspend fun getCakes(): Response<List<flowerModel>>{
+    suspend fun getFlowers(): Response<List<flowerModel>>{
         return RetrofitClient.getFlowerService(ApiInterface::class.java).getFlowerslist()
     }
 }

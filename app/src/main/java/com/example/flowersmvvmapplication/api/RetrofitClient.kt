@@ -3,7 +3,6 @@ package com.example.flowersmvvmapplication.api
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
@@ -15,13 +14,16 @@ object RetrofitClient {
         return RETROFIT_INSTANCE ?: synchronized(this) {
             val interceptor = HttpLoggingInterceptor()
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-            val client: OkHttpClient = OkHttpClient().newBuilder().addInterceptor(interceptor).build()
+//            val builder = OkHttpClient.Builder()
+//            builder.addInterceptor(interceptor)
+            val client = OkHttpClient.Builder()
+//                    .addInterceptor(interceptor)
+                    .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(client)
-                .build()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build()
             RETROFIT_INSTANCE = retrofit
             retrofit
         }
