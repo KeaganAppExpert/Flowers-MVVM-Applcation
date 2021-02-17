@@ -3,12 +3,12 @@ package com.example.flowersmvvmapplication.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.flowersmvvmapplication.model.flowerModel
+import com.example.flowersmvvmapplication.model.Flower_Model
 import com.example.flowersmvvmapplication.repository.FlowerRepository
 import com.example.flowersmvvmapplication.util.Coroutines
 
 class FlowersViewModel: ViewModel() {
-    var flowersList = MutableLiveData<List<flowerModel>?>()
+    var flowersList = MutableLiveData<List<Flower_Model>?>()
 
     init {
         refreshList()

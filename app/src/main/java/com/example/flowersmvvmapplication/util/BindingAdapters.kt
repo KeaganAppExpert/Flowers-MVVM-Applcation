@@ -6,5 +6,6 @@ import com.bumptech.glide.Glide
 
 @BindingAdapter("imageUrl")
 fun setImageUrl(imageView: ImageView, url: String) {
-    Glide.with(imageView.context).load(url).into(imageView)
+    val basePhotoURL = "https://services.hanselandpetal.com/photos/"
+    Glide.with(imageView.context).load(basePhotoURL + url).into(imageView)
 }

@@ -7,30 +7,30 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class flowerModel (
+data class Flower_Model (
     @SerializedName("category")
     @Expose
-    private var category: String? = null,
+    var category: String? = null,
 
     @SerializedName("price")
     @Expose
-    private var price: Double? = null,
+    var price: Double? = null,
 
     @SerializedName("instructions")
     @Expose
-    private var instructions: String? = null,
+    var instructions: String? = null,
 
     @SerializedName("photo")
     @Expose
-    private var photo: String? = null,
+    var photo: String? = null,
 
     @SerializedName("name")
     @Expose
-    private var name: String? = null,
+    var name: String? = null,
 
     @SerializedName("productId")
     @Expose
-    private var productId: Int? = null,
-    ): Parcelable {
+    var productId: String? = null,
+): Parcelable{
 
 }

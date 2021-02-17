@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flowersmvvmapplication.R
 import com.example.flowersmvvmapplication.adapter.flowersAdapter
-import com.example.flowersmvvmapplication.databinding.ActivityMainBinding
 import com.example.flowersmvvmapplication.databinding.FragmentFlowerListBinding
 import com.example.flowersmvvmapplication.viewmodel.FlowersViewModel
-import kotlinx.coroutines.flow.flow
+import kotlinx.android.synthetic.main.fragment_flower_list.view.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,14 +30,9 @@ private const val ARG_PARAM2 = "param2"
  */
 class flowerListFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var mRecyclerView: RecyclerView?= null
     private var mAdapter: flowersAdapter?= null
     private var pDialog: ProgressDialog?= null
 
-    private var _binding: FragmentFlowerListBinding? = null
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
     private val flowersViewModel by lazy {
             ViewModelProviders.of(this).get(FlowersViewModel::class.java)
@@ -63,14 +57,25 @@ class flowerListFragment : Fragment() {
             viewmodel = flowersViewModel
         }
 
-        return binding.root
-    }
+        binding.root.list.apply {
+            mAdapter = flowersAdapter(
+                R.layout.card_row,
+                context!!
+            )
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
+            adapter = mAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initialRecyclerView()
+            flowersViewModel.flowersList?.observe(viewLifecycleOwner, { flowersList ->
+                flowersList?.apply {
+                    mAdapter?.mItems = this
+                }
+            })
+        }
+
         intialaizeProgress()
-        retrieveData()
+        hidePDialog()
+
+        return binding.root
     }
 
     override fun onResume() {
@@ -83,14 +88,13 @@ class flowerListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         hideDialog()
     }
-/*
+
     override fun onDestroy() {
         super.onDestroy()
         hideDialog()
-    }*/
+    }
 
     private fun hideDialog() {
         pDialog!!.dismiss()
@@ -104,12 +108,6 @@ class flowerListFragment : Fragment() {
         pDialog!!.show()
     }
 
-    private fun initialRecyclerView() {
-        this.mRecyclerView = view!!.findViewById(R.id.list)
-        this.mRecyclerView!!.layoutManager = LinearLayoutManager(context)
-        this.mRecyclerView!!.itemAnimator = DefaultItemAnimator()
-    }
-
     private fun hidePDialog() {
         if (pDialog != null) {
             pDialog!!.dismiss()
@@ -117,18 +115,4 @@ class flowerListFragment : Fragment() {
         }
     }
 
-    fun retrieveData() {
-        mAdapter = flowersAdapter(
-            R.layout.card_row,
-            context!!
-        )
-            mRecyclerView!!.adapter = mAdapter
-            hidePDialog()
-
-        flowersViewModel.flowersList?.observe(viewLifecycleOwner, { flowersList ->
-            flowersList?.apply {
-                mAdapter?.mItems = this
-            }
-        })
-    }
 }

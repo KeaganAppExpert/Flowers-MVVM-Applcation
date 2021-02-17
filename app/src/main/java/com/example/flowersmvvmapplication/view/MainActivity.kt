@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        /*_subscriptions = RxUtils.getNewCompositeSubIfUnsubscribed(_subscriptions);*/
     }
 
     override fun onPause() {
